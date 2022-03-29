@@ -8,7 +8,7 @@ const kSendButtonTextStyle = TextStyle(
 
 const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-  hintText: 'Type your massage here....',
+  hintText: 'Type your message here....',
   hintStyle: TextStyle(color: Colors.grey),
   border: InputBorder.none,
 );
