@@ -12,13 +12,13 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController massageTextController = TextEditingController();
+  TextEditingController messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   late User loggedInUser;
 
-  late String massageText;
+  late String messageText;
 
   late DateTime now;
 
@@ -65,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             StreamBuilder<QuerySnapshot>(
               stream: _firestore
-                  .collection('massages')
+                  .collection('messages')
                   .orderBy('time', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -78,42 +78,42 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 final massages = snapshot.data!.docs;
-                List<MassageBubble> massageBubbles = [];
-                for (var massage in massages) {
-                  final massageText = massage['text'];
-                  final massageSender = massage['sender'];
+                List<MessageBubble> messageBubbles = [];
+                for (var message in massages) {
+                  final messageText = message['text'];
+                  final messageSender = message['sender'];
 
                   final currentUserEmail = loggedInUser.email;
 
-                  final massageBubble = MassageBubble(
-                    sender: massageSender,
-                    text: massageText,
-                    isMe: currentUserEmail == massageSender,
+                  final messageBubble = MessageBubble(
+                    sender: messageSender,
+                    text: messageText,
+                    isMe: currentUserEmail == messageSender,
                   );
-                  massageBubbles.add(massageBubble);
+                  messageBubbles.add(messageBubble);
                 }
                 return Expanded(
                   child: ListView(
                     reverse: true,
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    children: massageBubbles,
+                    children: messageBubbles,
                   ),
                 );
               },
             ),
             Container(
-              decoration: kMassageContainerDecoration,
+              decoration: kMessageContainerDecoration,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: massageTextController,
+                      controller: messageTextController,
                       style: TextStyle(color: Colors.black),
                       onChanged: (value) {
-                        massageText = value;
+                        messageText = value;
                       },
-                      decoration: kMassageTextFieldDecoration,
+                      decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
@@ -122,12 +122,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         now = DateTime.now();
                         formatedDate = DateFormat('kk:mm:ss').format(now);
                       });
-                      _firestore.collection('massages').add({
-                        'text': massageText,
+                      _firestore.collection('messages').add({
+                        'text': messageText,
                         'sender': loggedInUser.email!,
                         'time': formatedDate
                       });
-                      massageTextController.clear();
+                      messageTextController.clear();
                     },
                     child: Text(
                       'Send',
@@ -144,12 +144,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MassageBubble extends StatelessWidget {
+class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
   final bool isMe;
 
-  MassageBubble({required this.sender, required this.text, required this.isMe});
+  MessageBubble({required this.sender, required this.text, required this.isMe});
 
   @override
   Widget build(BuildContext context) {

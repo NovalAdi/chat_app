@@ -6,14 +6,14 @@ const kSendButtonTextStyle = TextStyle(
   fontSize: 18,
 );
 
-const kMassageTextFieldDecoration = InputDecoration(
+const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
   hintText: 'Type your massage here....',
   hintStyle: TextStyle(color: Colors.grey),
   border: InputBorder.none,
 );
 
-const kMassageContainerDecoration = BoxDecoration(
+const kMessageContainerDecoration = BoxDecoration(
   border: Border(
     top: BorderSide(
       color: Colors.lightBlueAccent,
